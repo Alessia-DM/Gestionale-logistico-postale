@@ -1,0 +1,208 @@
+@charset "UTF-8";
+
+/* ========================= */
+/* LAYOUT GENERALE */
+/* ========================= */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+body {
+    /* Sfondo */
+    background-image: url('/img/shape_fiven_loading.png');
+    background-size: 650px 650px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed; /* sfondo fisso */
+}
+
+/* ========================= */
+/* CONTAINER PRINCIPALE PAGINA */
+/* ========================= */
+.page-container {
+    height: 100vh; /* tutta la viewport */
+    display: flex;
+    flex-direction: column; /* login sopra, footer sotto */
+}
+
+/* ========================= */
+/* WRAPPER LOGIN (CENTRATO) */
+/* ========================= */
+.login-wrapper {
+    flex: 1; /* prende tutto lo spazio disponibile sopra il footer */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    
+    /* Sposta leggermente il login verso il footer */
+    transform: translateY(10%); /* positivo = verso il basso */
+}
+
+/* ========================= */
+/* BOX LOGIN */
+/* ========================= */
+.login-box {
+    display: flex;
+    flex-direction: column; /* impila login-up e login-down */
+    width: 100%;
+    max-width: 600px;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ========================= */
+/* RIGA SUPERIORE (LOGO) */
+/* ========================= */
+.login-up {
+    background-color: rgba(23, 31, 226, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    backdrop-filter: blur(45px);
+    -webkit-backdrop-filter: blur(45px);
+}
+
+.login-logo {
+    width: 80%;
+    max-width: 200px;
+    height: auto;
+}
+
+/* ========================= */
+/* RIGA INFERIORE (FORM) */
+/* ========================= */
+.login-down {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 2.5rem;
+}
+
+/* HEADER */
+.login-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-header h2 {
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* ========================= */
+/* FORM CONTROL */
+/* ========================= */
+.form-control {
+    border-radius: 10px;
+    font-size: 0.9rem; /* riduce il testo durante la scrittura */
+}
+
+::placeholder {
+    font-size: 0.85rem;
+}
+
+/* input username + password affiancati */
+.d-flex.gap-2 {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.d-flex.gap-2 input.form-control {
+    flex: 1;
+}
+
+/* ========================= */
+/* OPZIONI LOGIN */
+/* ========================= */
+.login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.login-options a {
+    text-decoration: none;
+}
+
+/* ========================= */
+/* BOTTONE */
+/* ========================= */
+.btn-custom {
+    display: inline-block;
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+
+    color: #fff;
+    background-color: #171fe2;
+    border: 1px solid #171fe2;
+    border-radius: 0.375rem;
+
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.btn-custom:hover {
+    background-color: #0d1384;
+    border-color: #0d1384;
+    color:#ffffff;
+}
+
+.btn-custom:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(23, 31, 226, 0.5);
+}
+
+.btn-custom:active {
+    background-color: #0a0e63;
+    border-color: #0a0e63;
+}
+
+/* ========================= */
+/* MESSAGGI */
+/* ========================= */
+.login-error {
+    color: #dc3545;
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 700;
+}
+
+.login-logout {
+    color: #198754;
+    margin-top: 1rem;
+}
+
+/* ========================= */
+/* FOOTER STATICO */
+/* ========================= */
+.footer,
+.fixed-footer {
+    height: 60px;
+    flex-shrink: 0; /* non si comprime mai */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgba(255,255,255,0.8);
+    backdrop-filter: blur(10px);
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+@media (max-width: 768px) {
+    /* username e password uno sotto l'altro su mobile */
+    .d-flex.gap-2 {
+        flex-direction: column;
+    }
+
+    .login-box {
+        max-width: 90%;
+    }
+}

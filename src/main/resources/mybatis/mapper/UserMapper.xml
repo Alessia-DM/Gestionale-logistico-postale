@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.esempioFiven.mybatis.mapper.UserMapper">
+
+    <select id="getByUsername" resultType="com.example.esempioFiven.model.User">
+        SELECT idOperatore AS idOperatore,
+        	   codiceOperatore,
+               username,
+               password,
+               descrizione,
+               email,
+               telFisso,
+               telMobile,
+               centroDematId,
+               profiloId,
+               enabled,
+               dataInserimento
+        FROM users
+        WHERE username = #{username}
+    </select>
+    <update id="incrementTentativiFalliti" parameterType="String">
+	    UPDATE users
+	    SET tentativiFalliti = tentativiFalliti + 1
+	    WHERE username = #{username}
+	</update>
+    <update id="resetTentativiFalliti" parameterType="String">
+	    UPDATE users
+	    SET tentativiFalliti = 0
+	    WHERE username = #{username}
+	</update>
+	<update id="updateProfilo" parameterType="map">
+        UPDATE users
+        SET email = #{email},
+            telFisso = #{telFisso},
+            telMobile = #{telMobile}
+        WHERE username = #{username}
+    </update>
+    <select id="findAllUtenti" resultType="com.example.esempioFiven.model.User">
+		SELECT idOperatore,
+           codiceOperatore,
+           username,
+           descrizione,
+           email,
+           telFisso,
+           telMobile,
+           centroDematId,
+           profiloId,
+           enabled,
+           dataInserimento
+        FROM users
+	</select>
+    
+
+</mapper>

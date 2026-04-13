@@ -1,0 +1,155 @@
+@charset "UTF-8";
+
+
+/* ===================================== */
+/* 	per le pagine con sidebar e filtri   */
+/* ===================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+	margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height:100vh;
+}
+
+
+.layout {
+    display: flex;
+    flex: 1 0 auto;
+    align-items: stretch; /* Forza la sidebar a seguire l'altezza dell'article */
+    min-height: calc(100vh - 70px); 
+    width: 100%;
+
+}
+
+.sidebar{
+	display: flex;
+    flex-direction: column;
+    width: 280px;
+    min-width: 280px;
+	/* Gradiente + Immagine (la virgola separa i layer) */
+  	background-image: 
+    url('../img/fiven3D.png'), 
+    linear-gradient(to bottom, #031435 0%, #000080 100%);
+    /* Proprietà per gestire i singoli layer (in ordine) */
+	background-repeat: no-repeat, no-repeat; /* PNG no-repeat, Gradiente riempie */
+	background-position: center, center;    /* Posizione PNG, posizione Gradiente */
+	background-size: 350px auto, cover;
+	padding:20px;
+	color:#ffffff;
+}
+
+.sidebar ul{
+	list-style-type:none;
+	padding:0;
+}
+
+.article{
+	flex:1;
+	padding:20px;
+	background:#f8f9fa;
+	min-width:0;
+}
+
+
+@media (max-width: 992px) { /* Alziamo a 992px per Tablet/Laptop piccoli */
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        flex: 0 0 auto;
+        width: 100%;
+        min-height: auto;
+        background-position: center bottom 10px, center;
+        background-size: 180px auto, cover; /* Logo più proporzionato */
+        padding-bottom: 40px;
+    }
+
+    .article {
+        width: 100%;
+        padding: 15px;
+    }
+}
+
+.sidebar-form-container {
+    flex-grow: 1;
+}
+
+/* Container per operatori (per evitare che la sidebar diventi infinita) */
+.checkbox-scroll-container {
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+
+/* =================================================== */
+/*					Stile checkbox					   */
+/* =================================================== */
+
+.form-check-input:checked {
+    background-color: #000080;
+    border-color: #031435;
+}
+
+.form-check-label {
+    cursor: pointer;
+    color: #031435;
+}
+
+/* Stile per l'input data: ridotto in larghezza e centrato */
+input[type="date"].btn-select-custom {
+    width: 92% !important; /* Leggermente meno largo rispetto al 100% */
+    margin: 0 auto;        /* Centra il bottone se necessario */
+    text-transform: uppercase;
+    font-family: inherit;
+    font-size: 0.85rem;
+    display: block;
+}
+
+/* Icona del calendario: Blu #031435 (stesso colore della freccia) */
+input[type="date"].btn-select-custom::-webkit-calendar-picker-indicator {
+    /* Filtro specifico per matchare esattamente il blu #031435 */
+    filter: invert(8%) sepia(94%) saturate(4532%) hue-rotate(213deg) brightness(94%) contrast(110%);
+    cursor: pointer;
+    transform: scale(1.3); /* Icona leggermente più grande */
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+/* Effetto Hover: l'icona diventa bianca e si ingrandisce un altro po' */
+input[type="date"].btn-select-custom:hover::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(100%);
+    transform: scale(1.4); /* Effetto feedback visivo all'hover */
+}
+
+/* Migliora le checkbox sulla sidebar scura */
+.sidebar .form-check-label {
+    color: #ffffff; /* Testo bianco per la sidebar */
+}
+
+.sidebar .checkbox-scroll-container {
+    background: rgba(255, 255, 255, 0.1); /* Sfondo semi-trasparente scuro */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sidebar .form-check-input {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+

@@ -1,0 +1,96 @@
+/* =========================
+   NAVBAR
+   ========================= */
+
+.custom-navbar {
+    background-color: #171fe2; 
+}
+
+/* Brand */
+.custom-navbar .navbar-brand {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.custom-navbar .navbar-brand:hover {
+    color: #000080;
+}
+
+/* Spazio tra brand e menu */
+.custom-navbar .navbar-nav {
+    margin-left: 1.5rem;
+}
+
+/* Link */
+.custom-navbar .nav-link {
+    color: #ffffff;
+    margin-right: 0.5rem;
+}
+
+.custom-navbar .nav-link:hover {
+    color: #000080;
+}
+
+/* Link attivo */
+.custom-navbar .nav-link.active {
+    color: #000080;
+    font-weight: 500;
+}
+
+/* Dropdown */
+.custom-navbar .dropdown-menu {
+    background-color: #171fe2;
+    border: none;
+}
+
+.custom-navbar .dropdown-item {
+    color: #ffffff;
+}
+
+.custom-navbar .dropdown-item:hover {
+    background-color: #000080;
+    color: #ffffff;
+}
+
+/* Mobile toggler */
+.custom-navbar .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.custom-navbar .navbar-toggler-icon {
+    filter: invert(1);
+}
+
+.user-area {
+    display: flex;
+    flex-direction: column;   /* ← QUESTO è IL PUNTO CHIAVE */
+    align-items: center;
+    gap: 6px;
+}
+
+.user-name {
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.user-info{
+	color:white;
+}
+
+.user-info a{
+	color:white;
+	text-decoration:none;
+}
+
+.user-info a:hover{
+	color: #000080;
+}
+
+.logout-btn {
+    padding: 0;
+    color: white;
+}
+
+.logout-btn:hover {
+    color: #000080;
+}

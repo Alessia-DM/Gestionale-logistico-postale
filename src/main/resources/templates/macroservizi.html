@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${pageTitle} ?: 'Gestionale Stage Fiven - Macroservizi'"></title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- CSS custom -->
+    <link rel="stylesheet" th:href="@{/css/pagestyle.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+</head>
+
+<body>
+
+<!-- NAVBAR FRAGMENT -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- CONTENUTO -->
+<main class="container mt-5">
+    <h1>Sezione macroservizi</h1>
+    <p> Qui potrai visualizzare tutti i servizi disponibili divisi in macrocategorie.</p>
+
+    
+    <div class="table-responsive">
+        <table class="table-generica">
+            <thead>
+                <tr>
+                    <th><i>Macroservizio</i></th>
+                    <th><i>Descrizione macroservizio</i></th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="macros : ${macroservizi}">
+                <!-- Blocco dei macroservizi -->
+                <tr>
+                	<td>
+                		<a class="bottone-linkato" data-bs-toggle="collapse" th:href="'#servizi-' + ${macros.id}" role="button" th:text="${macros.nome}"></a>
+                	</td>
+                	<td th:text="${macros.descrizioneMacro}"></td>
+                </tr> 
+                <!-- Blocco dei servizi -->
+                <tr>
+                	<td colspan="2" class="p-0 border-0">
+                		<div class="collapse" th:id="'servizi-' + ${macros.id}">
+                			<table class="table table-sm mb-0">
+                				<tr th:each="servizio : ${macros.servizi}">
+                					<td class="ps-5">
+                						▸ <span th:text="${servizio.nomeServizio}"></span>
+                					</td>
+                				</tr>
+                				
+                				<tr th:if="${#lists.isEmpty(macros.servizi)}">
+                					<td class="ps-5 text-muted">
+                						Nessun servizio associato
+                					</td>
+                				</tr>	
+                			</table>
+                		</div>
+                	</td>
+                </tr>
+                </th:block>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<!-- FOOTER FRAGMENT -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} ?: 'Gestionale Stage Fiven - Sezione scatole'"></title>
+
+	<link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/pagestyle.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/sidebarstyle.css}">
+    <link rel="stylesheet" th:href="@{/css/buttons.css}">
+</head>
+
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="layout">
+<div class="sidebar p-3">	
+    <div class="sidebar-form-container">
+	        <h5>Filtri Avanzati</h5>
+	        <hr>
+	
+	        <form th:action="@{/scatole}" method="get" id="filterForm">
+	            <input type="hidden" name="keyword" th:value="${f.keyword}">
+	            <input type="hidden" name="orderBy" th:value="${f.orderBy}">
+	            <input type="hidden" name="direzione" th:value="${f.direzione}">
+	
+	            <div class="mb-4">
+	                <label class="form-label small fw-bold text-white">Stato:</label>
+	                <div class="checkbox-scroll-container"> 
+	                    <div class="form-check" th:each="stat :${listaStati}">
+	                        <input class="form-check-input" type="checkbox" name="stato" th:value="${stat}" 
+	                               th:id="'st-' + ${stat}" th:checked="${stat == f.stato}">
+	                        <label class="form-check-label small" th:for="'st-' + ${stat}"  th:text="${stat}"></label>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="mb-4">
+	                <label class="form-label small fw-bold text-white">Operatore:</label>
+	                <div class="checkbox-scroll-container"> 
+	                    <div th:each="op : ${listaOperatori}" 
+	                    	 class="form-check"
+	                    	 th:with="stringaConcat=${#strings.arraySplit(op,'|')}">
+	                        <input class="form-check-input" type="checkbox" name="operatore" 
+	                               th:value="${stringaConcat[0]}" th:id="'op-' + ${stringaConcat[0]}"
+	                               th:checked="${stringaConcat[0] == f.operatore}">
+	                        <label class="form-check-label small" th:for="'op-' + ${stringaConcat[0]}" th:text="${#strings.capitalize(stringaConcat[1])}"></label>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="mb-3">
+	                <label class="form-label small fw-bold text-white">Dal:</label>
+	                <input type="date" name="startDate" class="btn-select-custom w-100" 
+	                       th:value="${#dates.format(f.startDate, 'yyyy-MM-dd')}">
+	            </div>
+	            <div class="mb-3">
+	                <label class="form-label small fw-bold text-white">Al:</label>
+	                <input type="date" name="endDate" class="btn-select-custom w-100" 
+	                       th:value="${#dates.format(f.endDate, 'yyyy-MM-dd')}">
+	            </div>
+	
+	            <div class="d-grid gap-2 mt-4">
+	                <button type="submit" class="ricerca-btn">Applica Filtri</button>
+	                <a th:href="@{/scatole}" class="btn btn-sm btn-outline-light border-0 opacity-75">Reset filtri</a>
+	            </div>
+	        </form>
+	    </div>
+	</div>
+
+    <div class="article">
+    
+		<div class="row">
+	    	<div class="col-md-8">
+		        <h1>Sezione scatole</h1>
+		        <p>Ricerca mirata di una scatola (SCAT) o un documento (DIST).</p> 
+
+		   	</div>
+	        
+	        <div class="col-md-4">
+	           	<div class="card widget-statistiche mb-4 p-2 text-center">
+			        <h6 class="small fw-bold mb-1">Produttività Mese</h6>
+			        <div class="valore-widget" th:text="${scatoleLavorateMese}">0</div>
+			        <small>Scatole lavorate</small>
+			    </div>
+			</div>
+					        <br>
+		        <small> (Nella seguente pagina è possibile visualizzare le scatole presenti nel database
+		        e il loro contenuto - premendo sul pulsante "Vedi".
+		        E' possibile, inoltre, ordinarle in base: alla data di inserimento, al codice della scatola,
+		        al codice del documento, allo stato e alla materialità. Vi è anche la possibilità di usare dei filtri
+		        sullo stato o l'operatore. 
+		        <br> 
+		        Di default le scatole visualizzate sono quelle degli ultimi 6 mesi, ma il range temporale è modificabile.
+		        <br>
+		        Il badge della produttività conta il numero di scatole inserite negli ultimi 30 giorni.
+		        <br>
+		        Nella colonna "Totale mazzette" è presente il numero delle mazzette contenute in ogni scatola ed esso è cliccabile:
+		         una volta premuto, infatti, si aprirà una finestra con una "tabella annidata" che conterrà i codici e le informazioni relative.)
+		        </small>
+		       
+		       <hr>
+		</div>
+
+        <div class="container-fluid mb-4 px-0">
+            <div class="row">
+                <div class="col-md-8">
+				<form class="d-flex" th:action="@{/scatole}" method="get">
+				    <input type="hidden" name="stato" th:value="${f.stato}">
+				    <input type="hidden" name="operatore" th:value="${f.operatore}"> 
+				    <input type="hidden" name="orderBy" th:value="${f.orderBy}">     
+				    <input type="hidden" name="direzione" th:value="${f.direzione}"> 
+				    <input type="hidden" name="startDate" th:value="${#dates.format(f.startDate, 'yyyy-MM-dd')}">
+				    <input type="hidden" name="endDate" th:value="${#dates.format(f.endDate, 'yyyy-MM-dd')}">
+				    
+				    <input class="form-control" type="search" name="keyword" th:value="${f.keyword}" placeholder="Cerca...">
+				    <button class="ricerca-btn ms-2" type="submit">Cerca</button>
+				</form>
+                </div>
+            </div>
+        </div>
+
+		<div class="d-flex justify-content-between align-items-center mb-3">
+		    <div class="text-muted small">
+		        <span th:if="${totaleScatole > 0}">
+		            Trovate <strong th:text="${totaleScatole}">0</strong> scatole.
+		        </span>
+		        <span th:if="${totaleScatole == 0}">Nessun risultato trovato.</span>
+		    </div>
+		
+			<div class="dropdown">
+			    <span class="small fw-bold" style="color: #031435;">Ordinamento:</span>
+			    
+				<span class="link-ordinamento dropdown-toggle" 
+				      id="dropdownOrder" data-bs-toggle="dropdown" aria-expanded="false">
+				    
+				    <span th:text="${(f.orderBy == null or orderBy == '' or f.orderBy == 'codiceScatola') ? 'Codice Scatola' : 
+				                     f.orderBy == 'dataCreazione' ? 'Più recenti' : 
+				                     f.orderBy == 'codiceDocumento' ? 'Documento (DIST)' :
+				                     f.orderBy == 'statoDescrizione' ? 'Stato' :
+				                     f.orderBy == 'tipologia' ? 'Materialità' : 'Codice Scatola'}"></span>
+				</span>
+			
+			    <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="dropdownOrder">
+				    <li>
+				        <a class="dropdown-item small py-2" th:classappend="${f.orderBy == 'dataCreazione'} ? 'active-dropdown'"
+				           th:href="@{/scatole(page=0, orderBy='dataCreazione', direzione='DESC', stato=${f.stato}, keyword=${f.keyword}, operatore=${f.operatore}, startDate=${#dates.format(f.startDate, 'yyyy-MM-dd')}, endDate=${#dates.format(f.endDate, 'yyyy-MM-dd')})}">
+				           <i class="bi bi-clock-history me-2"></i> Più recenti
+				        </a>
+				    </li>
+				    <li>
+				        <a class="dropdown-item small py-2" th:classappend="${f.orderBy == 'codiceScatola' or f.orderBy == null} ? 'active-dropdown'"
+				           th:href="@{/scatole(page=0, orderBy='codiceScatola', direzione='ASC', stato=${f.stato}, keyword=${f.keyword}, operatore=${f.operatore}, startDate=${#dates.format(f.startDate, 'yyyy-MM-dd')}, endDate=${#dates.format(f.endDate, 'yyyy-MM-dd')})}">
+				           <i class="bi bi-box-seam me-2"></i> Codice Scatola
+				        </a>
+				    </li>
+				    <li>
+				        <a class="dropdown-item small py-2" th:classappend="${f.orderBy == 'codiceDocumento'} ? 'active-dropdown'"
+				           th:href="@{/scatole(page=0, orderBy='codiceDocumento', direzione='ASC', stato=${f.stato}, keyword=${f.keyword}, operatore=${f.operatore}, startDate=${#dates.format(f.startDate, 'yyyy-MM-dd')}, endDate=${#dates.format(f.endDate, 'yyyy-MM-dd')})}">
+				           <i class="bi bi-file-earmark-text me-2"></i> Documento (DIST)
+				        </a>
+				    </li>
+				    <li>
+				        <a class="dropdown-item small py-2" th:classappend="${f.orderBy == 'statoDescrizione'} ? 'active-dropdown'"
+				           th:href="@{/scatole(page=0, orderBy='statoDescrizione', direzione='ASC', stato=${f.stato}, keyword=${f.keyword}, operatore=${f.operatore}, startDate=${#dates.format(f.startDate, 'yyyy-MM-dd')}, endDate=${#dates.format(f.endDate, 'yyyy-MM-dd')})}">
+				           <i class="bi bi-info-circle me-2"></i> Stato (A-Z)
+				        </a>
+				    </li>
+				    <li>
+				        <a class="dropdown-item small py-2" th:classappend="${f.orderBy == 'tipologia'} ? 'active-dropdown'"
+				           th:href="@{/scatole(page=0, orderBy='tipologia', direzione='ASC', stato=${f.stato}, keyword=${f.keyword}, operatore=${f.operatore}, startDate=${#dates.format(f.startDate, 'yyyy-MM-dd')}, endDate=${#dates.format(f.endDate, 'yyyy-MM-dd')})}">
+				           <i class="bi bi-tag me-2"></i> Materialità (A-Z)
+				        </a>
+				    </li>
+				</ul>
+			</div>
+		</div>
+
+        <div th:if="${f.keyword != null and f.keyword != ''}" class="alert alert-success py-2">
+		    Risultati per: <strong th:text="${f.keyword}"></strong>
+		    <a th:href="@{/scatole}" class="btn btn-sm btn-outline-success float-end" style="margin-top: -2px;">Reset</a>
+		</div>
+
+        <div class="table-responsive" th:if="${!#lists.isEmpty(scatole)}">
+            <table class="table table-generica">
+				<thead>
+				    <tr>
+				        <th>Codice Scatola</th>
+				        <th>Data Scansione</th>
+				        <th>Tipo Materialità</th>
+				        <th>Stato</th> 
+				        <th>Totale Mazzette</th>
+				        <th>Macroservizio</th>
+				        <th>Dettaglio</th>
+				    </tr>
+				</thead>
+                <tbody>
+				    <tr th:each="scatola : ${scatole}">
+				        <td class="fw-bold" th:text="${scatola.codiceScatola}"></td>
+				        <td th:text="${#dates.format(scatola.dataCreazione, 'dd/MM/yyyy HH:mm')}"></td>
+				        <td><span class="badge rounded-pill bg-light text-dark border" th:text="${scatola.tipologia}"></span></td>
+				        <td>
+				            <span class="badge status-badge" 
+				                  th:classappend="${scatola.statoDescrizione == 'Reggiata' ? 'status-reggiata' : 'status-lavorazione'}"
+				                  th:text="${scatola.statoDescrizione}">
+				            </span>
+				        </td>
+				        <td>
+				            <span class="badge bg-primary badge-interactive" data-bs-toggle="modal" 
+				                  th:attr="data-bs-target='#modal-' + ${scatola.idScatola}" 
+				                  th:text="${#lists.size(scatola.mazzette)}">0</span>
+				        </td>
+				        <td th:text="${scatola.idDdtFK}"></td>
+				        <td>
+				            <button type="button" class="btn-visualizza" data-bs-toggle="modal" 
+				                    th:attr="data-bs-target='#modal-' + ${scatola.idScatola}">
+				                <i class="bi bi-search"></i> Vedi
+				            </button>
+				
+				            <div class="modal fade" th:id="'modal-' + ${scatola.idScatola}" tabindex="-1" aria-hidden="true">
+				                <div class="modal-dialog modal-lg">
+				                    <div class="modal-content">
+				                        <div class="modal-header">
+				                            <h5 class="modal-title">Dettaglio <span th:text="${scatola.codiceScatola}"></span></h5>
+				                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				                        </div>
+				                        <div class="modal-body text-start">
+				                            <div class="row mb-3">
+				                                <div class="col-md-4">
+				                                    <strong>Operatore:</strong><br>
+				                                    <span th:text="${#strings.capitalize(scatola.idOperatoreFK)}"></span>
+				                                </div>
+				                                <div class="col-md-4">
+				                                    <strong>Stato:</strong><br>
+				                                    <span class="badge status-badge" 
+				                                          th:classappend="${scatola.statoDescrizione == 'Reggiata' ? 'status-reggiata' : 'status-lavorazione'}"
+				                                          th:text="${scatola.statoDescrizione}"></span>
+				                                </div>
+				                                <div class="col-md-4">
+				                                    <strong>ID Spedizione:</strong><br>
+				                                    <span th:text="${scatola.idSpedizioneFK}"></span>
+				                                </div>
+				                            </div>
+				                            <hr>
+				                            <h6>Elenco Mazzette</h6>
+				                            <table class="table table-sm table-bordered">
+				                                <thead class="table-light">
+				                                    <tr><th>Codice</th><th>Posizione</th><th>Doc</th></tr>
+				                                </thead>
+				                                <tbody>
+				                                    <tr th:each="m : ${scatola.mazzette}">
+				                                        <td th:text="${m.codiceMazzetta}"></td>
+				                                        <td th:text="${m.posizione}"></td>
+				                                        <td th:text="${m.numeroDocumenti}"></td>
+				                                    </tr>
+				                                </tbody>
+				                            </table>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				        </td>
+				    </tr> 
+				</tbody>
+            </table>
+        </div>
+
+		<nav aria-label="Navigazione" class="mt-4" th:if="${totalePagine > 1}">
+		    <ul class="pagination justify-content-center">
+		        <li class="page-item" th:classappend="${f.page == 0} ? 'disabled'">
+		            <a class="page-link" th:href="@{/scatole(page=${f.page - 1}, orderBy=${f.orderBy}, direzione=${f.direzione}, stato=${f.stato}, operatore=${f.operatore}, keyword=${f.keyword}, startDate=${#dates.format(f.startDate, 'yyyy-MM-dd')}, endDate=${#dates.format(f.endDate, 'yyyy-MM-dd')})}">&laquo;</a>
+		        </li>
+		
+		        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalePagine - 1)}" th:classappend="${i == f.page} ? 'active'">
+		            <a class="page-link" th:href="@{/scatole(page=${i}, orderBy=${f.orderBy}, direzione=${f.direzione}, stato=${f.stato}, operatore=${f.operatore}, keyword=${f.keyword}, startDate=${#dates.format(f.startDate, 'yyyy-MM-dd')}, endDate=${#dates.format(f.endDate, 'yyyy-MM-dd')})}" th:text="${i + 1}"></a>
+		        </li>
+		
+		        <li class="page-item" th:classappend="${f.page + 1 >= totalePagine} ? 'disabled'">
+		            <a class="page-link" th:href="@{/scatole(page=${f.page + 1}, orderBy=${f.orderBy}, direzione=${f.direzione}, stato=${f.stato}, operatore=${f.operatore}, keyword=${f.keyword}, startDate=${#dates.format(f.startDate, 'yyyy-MM-dd')}, endDate=${#dates.format(f.endDate, 'yyyy-MM-dd')})}">&raquo;</a>
+		        </li>
+		    </ul>
+		</nav> 
+    </div>
+</main>
+
+<footer class="text-center text-muted py-3 border-top">
+    <small>© 2026 – Progetto di Alessia Di Maio - Stage Junior Developer - Fiven</small>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="filtri.js"></script>
+</body>
+</html>

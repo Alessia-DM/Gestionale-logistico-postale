@@ -1,0 +1,36 @@
+/* =========================
+   STILE GENERALE
+   ========================= */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+    margin: 0;
+    padding: 0;
+}
+
+main h1 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #495057;
+}
+
+
+/* ===================================== */
+/* 	Parte di header nella sez. profilo   */
+/* ===================================== */
+
+.header-profilo{
+	display:flex;
+	justify-content:space-between;
+	align-items:center; /* allineamento verticale */
+	margin-bottom:1rem;
+	
+}
+
+

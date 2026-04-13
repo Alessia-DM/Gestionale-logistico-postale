@@ -1,0 +1,74 @@
+@charset "UTF-8";
+
+/* Stili Generali */
+body.stampa-page {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+/* Box Etichetta */
+.etichetta-box {
+    background-color: white;
+    border: 2px solid #000;
+    width: 10cm;
+    padding: 20px;
+    margin: 0 auto;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.etichetta-header {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: 2px;
+}
+
+.etichetta-divider {
+    border: 0;
+    border-top: 2px solid #000;
+    margin: 10px 0;
+}
+
+.barcode-font {
+    font-size: 45px;
+    font-family: 'Libre Barcode 39', cursive;
+    margin: 10px 0;
+}
+
+/* Tabella Contenuto */
+.etichetta-table {
+    width: 100%;
+    margin-top: 15px;
+    border-collapse: collapse;
+}
+
+.etichetta-table th, 
+.etichetta-table td {
+    border: 1px solid #333;
+    font-size: 13px;
+    padding: 6px;
+}
+
+.info-footer {
+    margin-top: 25px;
+    font-size: 11px;
+    text-align: left;
+    border-top: 1px dashed #ccc;
+    padding-top: 10px;
+}
+
+/* Gestione Stampa */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    body.stampa-page {
+        background-color: white;
+        padding: 0;
+    }
+    .etichetta-box {
+        box-shadow: none;
+        border: 2px solid black;
+    }
+}

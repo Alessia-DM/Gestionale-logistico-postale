@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Stampa Etichetta Pallet</title>
+    
+        <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/etichetteStyle.css}">
+</head>
+<body>
+
+    <div class="no-print-zone">
+        <button class="btn-stampa" onclick="window.print()">
+           <i class="bi bi-printer"></i> Stampa etichetta
+        </button>
+    </div>
+
+    <div class="etichetta-box" th:if="${pallet != null}">
+        <div class="header">
+            <h1>Pallet Unit</h1>
+        </div>
+
+        <div class="codice-pallet" th:text="${pallet.codicePallet}">P000000</div>
+
+        <div class="info-main">
+            <div><strong>DDT:</strong> <span th:text="${pallet.codiceDdtVisualizzato ?: pallet.idDdtFK}">-</span></div>
+            <div><strong>DATA:</strong> <span th:text="${pallet.dataCreazione != null ? #dates.format(pallet.dataCreazione, 'dd/MM/yyyy') : '-'}"></span></div>
+        </div>
+
+        <table class="table-scatole">
+            <thead>
+                <tr>
+                    <th>Codice Scatola</th>
+                    <th>N. Mazzette</th>
+                    <th>Operatore Scatola</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="s : ${scatole}">
+                    <td th:text="${s.codiceScatola}">-</td>
+                    <td th:text="${s.mazzette != null ? s.mazzette.size() : 0}">0</td>
+                    <td th:text="${s.nomeOperatore != null and s.nomeOperatore.contains('-') ? 
+                                   s.nomeOperatore.split('-')[1].trim() : 
+                                   (s.nomeOperatore ?: 'N/D')}">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            <strong>Note:</strong> <span th:text="${pallet.note ?: 'Nessuna nota'}"></span><br>
+            <strong>Creato da:</strong> <span th:text="${pallet.nomeOperatore != null and pallet.nomeOperatore.contains('-') ? pallet.nomeOperatore.split('-')[1].trim() : pallet.nomeOperatore}">-</span>
+        </div>
+    </div>
+
+    <div th:unless="${pallet != null}" style="text-align: center; color: red; margin-top: 50px;">
+        <h2>⚠️ Errore: Nessun dato trovato per questo pallet.</h2>
+        <a href="javascript:history.back()" class="btn-indietro">Torna alla lista</a>
+    </div>
+
+</body>
+</html>

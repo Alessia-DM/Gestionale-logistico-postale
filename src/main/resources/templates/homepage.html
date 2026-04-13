@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${pageTitle} ?: 'Gestionale Stage Fiven - Homepage'"></title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- CSS custom -->
+    <link rel="stylesheet" th:href="@{/css/homestyle.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+</head>
+
+<body>
+
+<!-- NAVBAR FRAGMENT -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- CONTENUTO -->
+<main class="container mt-5">
+    <h1>Benvenuto nel Gestionale Fiven</h1>
+    <p> Naviga nella navbar per scegliere quale azione eseguire.</p>
+	<section class="container-fluid my-5 px-md-5">
+        <div class="card-body p-4 p-md-5">          
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h5 class="h5 border-bottom pb-2 mb-3 text-primary fw-bold text-uppercase">Spiegazione del progetto</h5>
+                    <p class="lead text-secondary">
+                        Sviluppato durante il mio percorso di stage presso <strong>Fiven</strong>, questo sistema gestionale nasce dall'esigenza di digitalizzare e ottimizzare i flussi logistici end-to-end. 
+                        Il progetto rappresenta l'evoluzione di un'architettura precedente, focalizzandosi sulla sperimentazione di pattern avanzati per la gestione del dato.
+                    </p>
+                    <p class="text-muted">
+                        Ho progettato e implementato l'intero ciclo di vita della merce: dall'anagrafica clienti alla gestione dei Documenti di Trasporto (DDT), fino alla creazione fisica di scatole e pallet. 
+                        Il cuore innovativo di questa versione risiede nell'implementazione dei Mapper MyBatis, scelti deliberatamente per ottenere un controllo granulare sulle query SQL e massimizzare le performance di persistenza, garantendo una flessibilità superiore rispetto agli ORM standard.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="p-4 bg-light rounded-3 h-100 border-start border-primary border-4 shadow-sm">
+                        <h4 class="h5 fw-bold mb-3 text-dark"><i class="bi bi-cpu-fill me-2 text-primary"></i>Backend & Logica</h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check2 text-primary me-2"></i><strong>Java & Spring Boot:</strong> architettura robusta basata su pattern MVC.</li>
+                            <li class="mb-2"><i class="bi bi-check2 text-primary me-2"></i><strong>MyBatis Framework:</strong> gestione avanzata del livello di persistenza tramite Mapper XML e interfacce.</li>
+                            <li class="mb-2"><i class="bi bi-check2 text-primary me-2"></i><strong>Spring Security:</strong> implementazione di login sicuro, gestione sessioni e protezione dei dati.</li>
+                            <li class="mb-2"><i class="bi bi-check2 text-primary me-2"></i><strong>MySQL (MAMP):</strong> progettazione di un database relazionale ottimizzato per la logistica.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+				<div class="col-md-6">
+                    <div class="p-4 bg-light rounded-3 h-100 border-start border-warning border-4 shadow-sm">
+                        <h4 class="h5 fw-bold mb-3 text-dark"><i class="bi bi-code-slash me-2 text-warning"></i>Frontend & UX Custom</h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check2 text-warning me-2"></i><strong>Sviluppo Filtri Custom:</strong> progettazione integrale di moduli di filtraggio avanzati (senza plugin esterni) per una ricerca precisa su date, stati e operatori.</li>
+                            <li class="mb-2"><i class="bi bi-check2 text-warning me-2"></i><strong>Thymeleaf & CSS:</strong> styling personalizzato e gestione dinamica dei dati lato server.</li>
+                            <li class="mb-2"><i class="bi bi-check2 text-warning me-2"></i><strong>Logica di Interfaccia:</strong> implementazione manuale di sistemi di ordinamento (`orderBy`) e paginazione dinamica.</li>
+                            <li class="mb-2"><i class="bi bi-check2 text-warning me-2"></i><strong>Output Specialistici:</strong> creazione di template di stampa per etichette e gestione barcode custom.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 text-center">
+                <span class="badge rounded-pill bg-white text-primary border border-primary p-2 px-4 shadow-sm">
+                    <i class="bi bi-info-circle me-1"></i> Progetto focalizzato sulla scalabilità e sull'efficienza delle transazioni DB.
+                </span>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- FOOTER FRAGMENT -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

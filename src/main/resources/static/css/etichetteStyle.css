@@ -1,0 +1,138 @@
+/* CONFIGURAZIONE GENERALE */
+body { 
+    font-family: 'Arial', sans-serif; 
+    background-color: #f4f4f4; 
+    padding: 20px; 
+    margin: 0; 
+}
+
+/* BOX ETICHETTA - Misure in mm per precisione stampa A4 */
+.etichetta-box { 
+    background: white; 
+    border: 3px solid black; 
+    padding: 10mm; 
+    width: 180mm; 
+    margin: 0 auto; 
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+    box-sizing: border-box;
+}
+
+.header { 
+    text-align: center; 
+    border-bottom: 4px solid black; 
+    margin-bottom: 20px; 
+    padding-bottom: 10px; 
+}
+
+.header h1 { 
+    margin: 0; 
+    font-size: 2.5em; 
+    text-transform: uppercase; 
+}
+
+.info-main { 
+    display: flex; 
+    justify-content: space-between; 
+    font-size: 1.2em; 
+    margin-bottom: 20px; 
+}
+
+.codice-pallet { 
+    text-align: center; 
+    background: #000 !important; 
+    color: #fff !important; 
+    padding: 15px; 
+    margin: 20px 0; 
+    font-size: 2.5em; 
+    font-weight: bold; 
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.table-scatole { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 10px; 
+}
+
+.table-scatole th, .table-scatole td { 
+    border: 1px solid #000; 
+    padding: 8px; 
+    text-align: center; 
+}
+
+.table-scatole th { 
+    background-color: #eee !important; 
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.footer { 
+    margin-top: 30px; 
+    font-size: 0.9em; 
+    font-style: italic; 
+    border-top: 1px solid #ccc; 
+    padding-top: 10px; 
+}
+
+/* ZONA PULSANTI (Solo schermo) */
+.no-print-zone { 
+    text-align: center; 
+    margin-bottom: 30px; 
+    display: flex; 
+    justify-content: center; 
+    gap: 15px; 
+    align-items: center; 
+}
+
+.btn-stampa { 
+    background: #28a745; 
+    color: white; 
+    padding: 12px 25px; 
+    border: none; 
+    border-radius: 5px; 
+    font-size: 1em; 
+    cursor: pointer; 
+    font-weight: bold; 
+}
+
+.btn-stampa:hover { background: #218838; }
+
+.btn-indietro { 
+    background: #6c757d; 
+    color: white; 
+    padding: 12px 25px; 
+    border: none; 
+    border-radius: 5px; 
+    font-size: 1em; 
+    text-decoration: none; 
+    display: inline-block; 
+}
+
+.btn-indietro:hover { background: #5a6268; }
+
+/* REGOLE DI STAMPA */
+@media print {
+    @page { 
+        margin: 10mm; 
+        size: A4; 
+    }
+    
+    body { 
+        background: white; 
+        padding: 0; 
+        margin: 0; 
+    }
+
+    .no-print-zone { 
+        display: none !important; 
+    }
+
+    .etichetta-box { 
+        box-shadow: none; 
+        margin: 0 auto; 
+        width: 100%; 
+        border: 3px solid black;
+        page-break-inside: avoid;
+    }
+}

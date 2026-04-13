@@ -1,0 +1,354 @@
+/* ================================================================= */
+/*  	  Settaggio caratteristiche di una tabella generica	  	     */
+/* ================================================================= */
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto; /* Crea la barra di scorrimento orizzontale SOLO per la tabella */
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+}
+
+.table-generica {
+    width: 100%;
+    margin-bottom: 1rem;
+    vertical-align: top;
+    border-collapse: collapse;
+    background-color: transparent;
+    table-layout:fixed; 
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Header della tabella */
+.table-generica thead {
+    text-transform: uppercase;
+    font-size: 1.0rem;
+    color:#000000;
+}
+
+/* Celle del corpo */
+.table-generica tbody td {
+    padding: 12px 15px;
+    color: #333333;
+    font-size: 0.95rem;
+    white-space: nowrap;   /* numeri/codici stretti restano su una riga */
+    overflow: visible;     /* il testo non viene tagliato */
+    text-overflow: clip;   /* niente ellissi, mostra tutto il contenuto */
+}
+
+/* Colonne con testo lungo (es: Stato, Data) possono andare a capo */
+.table-generica td.testo-lungo {
+    white-space: normal;  /* permette al testo di andare a capo */
+}
+
+/* per la tabella annidata */
+.table-annidata {
+    width: auto;
+    background-color: transparent;
+    table-layout:auto; 
+    white-space: nowrap; /* numeri/codici restano su una riga */
+}
+
+/* Header della tabella */
+.table-annidata thead {
+    font-size: 1.0rem;
+    text-transform:none;
+}
+
+/* Celle del corpo */
+.table-annidata tbody td {
+    padding: 12px 15px;
+    color:rgb(103, 103, 103);  
+}
+
+/* Mantiene testo in una riga per colonne numeriche/codici */
+.table-annidata td,
+.table-annidata th {
+    white-space: nowrap;
+    text-overflow: clip; /* mostra tutto senza troncamenti */
+}
+
+
+/* ================================================================= */
+/*  Settaggio caratteristiche della tabella della sezione clienti    */
+/* ================================================================= */
+
+/* --- Stile moderno per la tabella clienti --- */
+.table-clienti {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0; /* non c'è spazio extra tra le celle*/
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* ombra attorno alla tabella */
+    border-radius: 12px; /* bordi della tabella arrotondati*/
+    background-color: #ffffff;
+}
+
+/* Header della tabella */
+.table-clienti thead {
+    text-transform: uppercase;
+    font-size: 1.0rem;
+}
+
+/* Riga hover */
+.table-clienti tbody tr:hover td {
+	background-color: rgb(23, 31, 226, 0.7);/* è il solito blu Fiven ma con il 70% di opacità*/
+    color: white;
+    cursor:pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Celle del corpo */
+.table-clienti tbody td {
+    padding: 12px 15px;
+    color:rgb(103, 103, 103);  
+    font-size: 0.95rem;
+}
+
+
+/* Bordo arrotondato opzionale per la prima colonna */
+.table-clienti tbody td:first-child {
+    border-top-left-radius: 12px; /* Arrotonda l'angolo superiore sinistro */
+    border-bottom-left-radius: 12px; /* Arrotonda l'angolo inferiore sinistro */
+}
+
+/* Bordo arrotondato opzionale per l'ultima colonna */
+.table-clienti tbody td:last-child {
+    border-top-right-radius: 12px; /* Arrotonda l'angolo superiore destro */
+    border-bottom-right-radius: 12px; /* Arrotonda l'angolo inferiore destro */
+}
+
+/* Header della tabella */
+.table-clienti thead th:first-child {
+    border-top-left-radius: 12px; /* angolo superiore sinistro */
+}
+
+.table-clienti thead th:last-child {
+    border-top-right-radius: 12px; /* angolo superiore destro */
+}
+
+
+/* ================================================================= */
+/*  Per gestire autonomamente il bottone con riferimento + collapse  */
+/* ================================================================= */
+
+.bottone-linkato {
+  display: inline-block;
+  font-weight: bold;
+  line-height: 1.5;
+  color:rgb(103, 103, 103);     
+  text-align: center;
+  text-decoration: none;
+  vertical-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: 0;                 
+  font-size: 1rem;
+  transition:
+    color .15s ease-in-out,
+    background-color .15s ease-in-out,
+    border-color .15s ease-in-out,
+    box-shadow .15s ease-in-out;
+}
+
+.bottone-linkato:hover {
+  color: #0000ff;
+  text-decoration: none;
+}
+
+.bottone-linkato:focus {
+  outline: 0;
+  box-shadow: none;
+}
+
+.bottone-linkato:active {
+  color: #0a58ca;
+}
+
+/* ============================================= */
+/*			Per l'impaginazione
+/* ============================================= */
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap; /* Se i numeri sono troppi, vanno a capo invece di allargare la pagina */
+    justify-content: center;
+    gap: 5px;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.page-item.active .page-link {
+    background-color: #000080; 
+    border-color: #000080;
+}
+
+.page-link {
+    color: #000080;
+}
+
+.page-link:hover{
+	color:rgba(23, 31, 226, 0.85);
+}
+
+/* Protezione extra per schermi molto stretti */
+@media (max-width: 480px) {
+    .page-link {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+}
+
+
+/* ============================================= */
+/*		Per i badge inseriti nella tabella
+/* ============================================= */
+/* Personalizzazione Base dei Badge */
+.badge {
+    padding: 0.5em 0.8em;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    border-radius: 6px; /* Meno arrotondati dei pill, più moderni */
+    transition: all 0.2s ease;
+}
+
+/* Variante per il Numero di Mazzette (Blu Fiven) */
+.badge.bg-primary {
+    background-color: #000080 !important; /* Colore primario */
+    box-shadow: 0 2px 4px rgba(13, 110, 253, 0.2);
+}
+
+/* Variante per Tipologia Materialità (Light/Bordered) */
+.badge.text-dark.border {
+    background-color: #f8f9fa !important;
+    border-color: #dee2e6 !important;
+    color: #495057 !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+.badge-reggiata {
+    background-color: #e1f5fe;
+    color: #0288d1;
+    border: 1px solid #b3e5fc;
+}
+
+.badge-lavorazione {
+    background-color: #fff3e0;
+    color: #ef6c00;
+    border: 1px solid #ffe0b2;
+}
+
+.badge:hover {
+    filter: brightness(95%);
+    transform: translateY(-1px);
+}
+
+/* Badge interattivo per le mazzette */
+.badge-interactive {
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    padding: 0.5em 0.8em;
+}
+
+.badge-interactive:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
+}
+
+/* ==================================================================== */
+/*		Sezione per i filtri (nella pagina) e la barra di ricerca 		*/
+/* ==================================================================== */
+
+.action-bar {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.2rem;
+    border: 1px solid #e9ecef;
+}
+
+.label-filter {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.3rem;
+    display: block;
+}
+
+/* ============================================================ */
+/* 		per il colore degli stati mostrati nella tabella 		*/
+/* ============================================================ */
+
+.status-badge {
+    padding: 0.5em 0.8em;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+}
+
+.status-reggiata { 
+    background-color: #d1e7dd !important; 
+    color: #0f5132 !important; 
+    border-color: #badbcc; 
+}
+
+.status-lavorazione { 
+    background-color: #fff3cd !important; 
+    color: #664d03 !important; 
+    border-color: #ffecb5; 
+}
+
+/* ============================================== */
+/* 		per il widget della produttività		  */
+/* ============================================== */
+
+.widget-statistiche {
+    border-left: 3px solid  rgba(0,0,128,0.45);
+    background: transparent;
+    box-shadow: 0 0.125rem 0.25rem  rgba(0,0,128,0.45);
+    transition: transform 0.2s;
+    color:#000080;
+}
+
+.widget-statistiche small {
+    color: rgb(73,80,87,0.45);
+}
+
+.widget-statistiche:hover {
+    transform: translateY(-3px);
+}
+
+.valore-widget {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color:rgb(0,0,128,0.85);
+    line-height: 1;
+}
+
+
+/* ====================================================================== */
+/* 		per nascondere una sezione che non voglio compaia a priori		  */
+/* ====================================================================== */
+
+.sezione-nascosta{
+	display:none;
+}
+
+.box-privato {
+    background-color: #f8f9fa; 
+    border: 2px solid #031435; 
+    border-radius: 8px;       
+    padding: 1.5rem;           
+    transition: all 0.3s ease; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.7);
+    color:#031435;
+}
+
+.box-privato h5 {
+    color: #031435; 
+    font-weight: bold;
+    border-bottom: 1px solid #031435;
+    padding-bottom: 0.5rem;
+}

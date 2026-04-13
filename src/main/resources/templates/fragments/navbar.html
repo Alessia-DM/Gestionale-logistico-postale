@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<nav class="navbar navbar-expand-lg custom-navbar" th:fragment="navbar">
+    <div class="container-fluid">
+
+        <!-- BRAND -->
+        <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+            <img src="/img/logo_fiven.png"
+                 alt="Logo Fiven"
+                 width="35"
+                 height="32"
+                 class="me-2">
+            <span>Gestionale Fiven</span>
+        </a>
+
+        <!-- TOGGLER MOBILE -->
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- MENU COLLASSABILE -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <!-- MENU CENTRALE -->
+            <ul class="navbar-nav mx-auto text-center">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-gear"></i> Hub di controllo
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/clienti">Anagrafica clienti</a></li>
+                        <li><a class="dropdown-item" href="/operatori">Operatori</a></li>
+                        <li><a class="dropdown-item" href="/macroservizi">Servizi e Macroservizi</a></li>
+                    </ul>
+                </li>
+
+<!-- 
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-collection"></i> Dispacci
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Pre-accettazione</a></li>
+                        <li><a class="dropdown-item" href="#">Sospesi</a></li>
+                    </ul>
+                </li>
+ -->
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-box-seam"></i> Scatole
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/scatole">Ricerca avanzata</a></li>
+                        <li><a class="dropdown-item" href="/inserimento">Inserimento nuova scatola</a></li>
+                        <li><a class="dropdown-item" href="/reggiatura">Gestione reggiatura</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-basket3"></i> Pallet
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/pallet}">Elenco pallet</a></li>
+                        <li><a class="dropdown-item" th:href="@{/pallet/inserimento}">Inserimento pallet</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-file-earmark-text"></i> DDT
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/ddt}">Elenco DDT</a></li>
+                        <li><a class="dropdown-item" th:href="@{/ddt/inserimento}">Inserimento DDT</a></li>
+                    </ul>
+                </li>
+
+<!-- 
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-exclamation-triangle"></i> Anomalie
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Monitor scatole</a></li>
+                        <li><a class="dropdown-item" href="#">Scatole seconda scansione</a></li>
+                    </ul>
+                </li>
+ -->                
+            </ul>
+
+            <!-- AREA DESTRA: UTENTE + LOGOUT -->
+			<div class="user-area ms-auto">
+			
+			    <!-- UTENTE -->
+			    <div class="user-info text-center">
+			        <i class="bi bi-person-circle fs-4"></i>
+			        <a th:href="@{/profilo}" th:text="${descrizioneUtente}"></a>
+					<span sec:authorize="!isAuthenticated()">
+					    Ospite
+					</span>		
+			    </div>
+			
+			    <!-- LOGOUT -->
+			    <form th:action="@{/logout}" method="post" class="logout-form">
+			        <button type="submit" class="btn btn-link logout-btn">
+			            <i class="bi bi-box-arrow-right"></i> Logout
+			        </button>
+			    </form>
+			</div>
+
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

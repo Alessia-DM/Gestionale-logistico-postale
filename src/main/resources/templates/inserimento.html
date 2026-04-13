@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} ?: 'Gestionale Stage Fiven - Inserimento nuova scatola'"></title>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/pagestyle.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/buttons.css}">
+    <link rel="stylesheet" th:href="@{/css/homestyle.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="layout">
+	<div class="container mt-3 ">
+	
+		<div class="row mb-4">
+			<div class="col-md-12">
+				<h1> Inserisci una nuova scatola</h1>
+				<p> Scansiona il barcode o inserisci manualmente il codice della scatole e completa i restanti campi obbligatori.</p> 
+				<hr>
+				
+				<small> In questa pagina sarà possibile inserire le scatole che andranno a popolare il DB.<br>
+				Il codice avrà un vincolo: dovrà essere composto dalla parola SCAT e una sequenza di numeri.<br>
+				Tra i DDT sarà possibile selezionare quelli già inseriti in precedenza. Analogo discorso per i clienti.
+				Per la sezione della tipologia, verranno visualizzati nel menù a tendina i tipi presenti in una tabella 
+				del DB chiamata "inventario" e, una volta selezionata e inserita la scatola, il numero che fa riferimento 
+				alla disponibilità verrà decrementato.<br>
+				Se dovesse essere selezionato il cliente privato, si aprirà un nuovo form in cui sarà possibile inserire 
+				i dati necessari e il cliente verrà memorizzato nella tabella "clienti_privati" del DB.<br> 
+				</small>
+				
+				<div class="container mt-3">
+				    <div th:if="${messaggioSuccesso}" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+				        <i class="bi bi-check-circle-fill me-2"></i> <span th:text="${messaggioSuccesso}"></span>
+				        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				    </div>
+				
+				    <div th:if="${messaggioErrore}" class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+				        <i class="bi bi-exclamation-triangle-fill me-2"></i> <span th:text="${messaggioErrore}"></span>
+				        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				    </div>
+				</div>		
+			</div>
+		</div>
+
+		
+		<div th:if="${formErrors != null and formErrors['global'] != null}" class="alert alert-danger fw-bold">
+	        <span th:text="${formErrors['global']}"></span>
+	    </div>
+	
+		<div class="container d-flex justify-content-center fluid px-0">
+			<form th:action="@{/scatole/salva}" th:object="${nuovaScatola}" method="post" class="p-4 sidebar-form-container rounded shadow">
+	    	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			    <div class="row justify-content-center g-3">
+			    	<div class="col-md-6 mb-2">
+			            <label class="form-label fw-bold">Codice scatola *</label>
+			            <input type="text" th:field="*{codiceScatola}" value="SCAT" class="form-control shadow-sm" 
+			            id="codiceScatolaInput" maxlength="15" required>
+			        	<div id="barcode-feedback" class="text-danger small fw-bold">
+					        <span th:if="${#fields.hasErrors('codiceScatola')}" th:errors="*{codiceScatola}"></span>
+					    </div>
+			        </div>
+			    	 <div class="col-md-6 mb-2">
+			            <label class="form-label fw-bold">Documento di trasporto *</label>
+			            <select th:field="*{idDdtFK}" class="form-select" required>
+			                <option value="">-- DDT disponibili --</option>
+			                <option th:each="doc : ${listaIdDDT}" 
+			                        th:value="${doc.idDdt}" 
+			                        th:text="${doc.codiceDdt}">
+			                        <!-- th:value è il valore che viene inserito nel th:field, mentre
+			                        	th:text è ciò che viene visualizzato dall'utente a video -->
+			                </option>
+			            </select>
+			            <div class="text-danger small" th:if="${#fields.hasErrors('idDdtFK')}" th:errors="*{idDdtFK}"></div>
+					</div>
+				</div>
+				<div class="row justify-content-center g-3">
+			        <div class="col-md-12 mb-3">
+			            <label class="form-label fw-bold">Cliente *</label>
+			            <select th:field="*{idClienteFK}" id="selectCliente" class="form-select shadow-sm" required>
+			                <option value="">-- Seleziona il Cliente --</option>
+			                <option th:each="c : ${listaClienti}" 
+			                        th:value="${c.idCliente}" 
+			                        th:text="${c.codiceCliente + ' - ' + c.ragioneSociale}">
+			                </option>
+			            </select>
+			            <div class="text-danger small" th:if="${#fields.hasErrors('idClienteFK')}" th:errors="*{idClienteFK}"></div>
+					</div>
+				</div>
+				<div class="col-8 justify-content-center d-flex mt-3">
+						<div id="sezionePrivato" class="sezione-nascosta box-privato">
+						    <h5 class="mb-3"><i class="bi bi-person-fill me-2"></i> Dati Cliente Privato</h5>
+						    <div class="row g-2">
+						        <div class="col-md-6">
+						            <label class="form-label small fw-bold">Nome *</label>
+						            <input type="text" name="nomePrivato" id="nomePrivato" class="form-control form-control-sm" placeholder="Nome">
+						        </div>
+						        <div class="col-md-6">
+						            <label class="form-label small fw-bold">Cognome *</label>
+						            <input type="text" name="cognomePrivato" id="cognomePrivato" class="form-control form-control-sm" placeholder="Cognome">
+						        </div>
+						    </div>
+						    <div class="row d-flex justify-content-center g-2">
+						        <div class="col-md-12">
+						            <label class="form-label small fw-bold">Codice Fiscale *</label>
+						            <input type="text" name="cfPrivato" id="cfPrivato" class="form-control form-control-sm" maxlength="16" placeholder="Codice fiscale">
+						        </div>
+						    </div>
+						    <div class="row d-flex justify-content-center g-2">
+						        <div class="col-md-12">
+						            <label class="form-label small fw-bold">Email </label>
+						            <input type="text" name="email" id="email" class="form-control form-control-sm" placeholder="Email (facoltativa)">
+						        </div>
+						       <!--  <div class="col-md-4">
+						            <input type="hidden" th:value="#{idScatolaFK}" th:text="#{idScatolaFK}">
+						            <input type="hidden" th:value="#{idSpedizioneFK}" th:text="#{idSpedizioneFK}">
+						            <input type="hidden" th:value="#{idDdtFK}" th:text="*{idDdtFK}">
+						        </div>--> 
+						    </div>
+						</div>
+					</div>
+				<div class="row justify-content-center g-3">
+					<div class="col-md-12 mb-3">
+						<label class="form-label fw-bold ">Tipologia *</label>
+			            <select th:field="*{tipologia}" class="form-select shadow-sm" required>
+			                <option value="">-- Seleziona Contenitore --</option>
+			                <option th:each="i : ${listaScatoleDisponibili}" 
+			                        th:value="${i.tipo}" 
+			                        th:text="${i.tipo + ' (Disponibili: '+ i.qta + ')'}">
+			                </option>
+			            </select>
+					</div>
+				</div>
+				<div class="d-flex justify-content-center gap-3 mt-4">
+					 <button type="submit" class="ricerca-btn px-8 py-2">
+			            <i class="bi bi-qr-code"></i> Conferma e Genera Barcode
+			        </button>
+			        <a th:href="@{/inserimento}" class="btn profilo-annulla px-4 py-2">Annulla</a>
+			    </div>
+			</form>
+		</div>
+	</div>
+</main>		        
+
+
+<!-- FOOTER FRAGMENT -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/formInserimento.js}"></script>
+<script th:src="@{/js/controlloEsistenza.js}"></script>
+
+</body>
+</html>

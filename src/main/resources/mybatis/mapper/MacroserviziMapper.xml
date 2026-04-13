@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.esempioFiven.mybatis.mapper.MacroserviziMapper">
+	<select id="findAllMacroservizi" resultType="com.example.esempioFiven.model.Macroservizi">
+		SELECT *
+		FROM macroservizi
+	</select>
+	
+	
+	<!-- Per legare la tabella macroservizi a quella dei servizi 
+		id="finAllWithServizi" -> metodo che userò nel mapper java
+		resultMap="macroservizioResultMap" -> per la relazione one-to-many non basta il resultType
+		
+		LEFT JOIN -> per prendere anche i macroservizi senza servizi associati
+	-->
+	<select id="findAllWithServizi" resultMap="macroservizioResultMap">
+
+	    SELECT 
+	        m.id,
+	        m.nomeMacros,
+	        m.descrizioneMacros,
+	
+	        s.id AS servizio_id,
+	        s.macroservizioId,
+	        s.nomeServizio
+	
+	    FROM macroservizi m
+	    LEFT JOIN servizi s ON m.id = s.macroservizioId
+	    ORDER BY m.id
+	
+	</select>
+	
+	
+	<!-- Per mettere il risultato della query di sopra in un model di tipo Macroservizio uso resultMap-->
+	<resultMap id="macroservizioResultMap" type="com.example.esempioFiven.model.Macroservizi">
+	
+	    <!-- CAMPI MACROSERVIZIO -->
+	    <!-- property è il nome che ha la colonna nel DB 
+	    	 mentre column è il nome corrispondente nel model 
+	    	 
+	    	 ID indica la chiave primaria -->
+	    <id property="id" column="id"/>
+	    <result property="nomeMacros" column="nomeMacros" javaType="string"/>
+	    <result property="descrizioneMacros" column="descrizioneMacros" javaType="string"/>
+	
+	    <!-- RELAZIONE ONE-TO-MANY -->
+	    <!-- in collection specifico che macroservizio ha una lista di oggetti di tipo Servizio -->
+	    <collection property="servizi" ofType="com.example.esempioFiven.model.Servizio">
+	
+	        <id property="id" column="servizio_id"/>
+	        <result property="macroservizioId" column="macroservizioId"/>
+	        <result property="nomeServizio" column="nomeServizio" javaType="string"/>
+	
+	    </collection>
+	
+	</resultMap>
+	
+	
+</mapper>

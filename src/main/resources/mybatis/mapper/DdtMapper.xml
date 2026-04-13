@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  <mapper namespace="com.example.esempioFiven.mybatis.mapper.DdtMapper">
+	<select id="findAllIdDdt" resultType="com.example.esempioFiven.model.DDT">
+		SELECT idDdt, codiceDdt
+		FROM ddt
+		WHERE (statoDdt NOT IN ('Consegnato', 'Annullato', 'In Giacenza') OR statoDdt IS NULL)
+		ORDER BY dataCreazione ASC
+	</select>
+	
+	<select id="findById" resultType="com.example.esempioFiven.model.DDT">
+		SELECT idDdt, codiceDdt, idSpedizioneFK
+		FROM ddt
+		WHERE idDdt = #{idDdt}
+	</select>
+	
+	<select id="countDdt" resultType="int">
+		SELECT COUNT(*)
+		FROM ddt
+		WHERE statoDdt != 'Consegnato' OR statoDdt IS NULL OR statoDdt != 'Annullato' OR statoDdt != 'In Giacenza'
+		ORDER BY dataCreazione ASC 
+	</select>
+	
+	<select id="findDdtPage" resultType="com.example.esempioFiven.dto.DdtDTO">
+	    SELECT 
+	        d.*, 
+	        u.descrizione AS nomeOperatore
+	    FROM ddt d
+	    LEFT JOIN users u ON d.idOperatoreFK = u.idOperatore 
+	    WHERE (d.statoDdt NOT IN ('Consegnato', 'Annullato', 'In Giacenza') OR d.statoDdt IS NULL)
+	    ORDER BY d.dataCreazione ASC
+	    LIMIT #{pageSize} OFFSET #{offset}
+	</select>
+	
+	<insert id="insertDdt" parameterType="com.example.esempioFiven.model.DDT" useGeneratedKeys="true" keyProperty="idDdt">
+	    INSERT INTO ddt (
+	        codiceDdt, 
+	        idOperatoreFK, 
+	        idClienteFK, 
+	        dataCreazione, 
+	        statoDdt, 
+	        descrizione
+	    ) VALUES (
+	        #{codiceDdt}, 
+	        #{idOperatoreFK}, 
+	        #{idClienteFK}, 
+	        NOW(), 
+	        'Creato', 
+	        #{descrizione}
+	    )
+	</insert>
+	
+	<update id="aggiornaConteggioColli">
+	    UPDATE ddt 
+	    SET numeroColliDichiarati = (SELECT COUNT(*) FROM scatole WHERE idDdtFK = #{idDdt})
+	    WHERE idDdt = #{idDdt}
+	</update>
+	
+	<select id="existsByCodeDdt" resultType="boolean">
+  		SELECT COUNT(*) > 0
+  		FROM ddt
+  		WHERE codiceDdt=#{codiceDdt}
+   	</select>
+	
+</mapper>

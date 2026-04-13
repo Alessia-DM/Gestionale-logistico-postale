@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.example.esempioFiven.mybatis.mapper.ScatoleMapper">
+
+    <resultMap id="scatoleResultMap" type="com.example.esempioFiven.model.Scatola">
+        <id property="idScatola" column="idScatola"></id>
+        <result property="codiceScatola" column="codiceScatola" javaType="string" ></result>
+        <result property="idDdtFK" column="idDdtFK"/>  		
+        <result property="idOperatoreFK" column="idOperatoreFK"></result>
+        <result property="nomeOperatore" column="nomeOperatore"></result> <result property="tipologia" column="tipologia"></result>
+        <result property="statoDescrizione" column="statoDescrizione"></result>
+        <result property="idClienteFK" column="idClienteFK"></result>
+        <result property="idSpedizioneFK" column="idSpedizioneFK"></result>
+        <result property="dataCreazione" column="dataCreazione"></result>
+        
+        <collection property="mazzette" ofType="com.example.esempioFiven.model.Mazzetta" notNullColumn="idMazzetta">
+            <id property="idMazzetta" column="idMazzetta"></id>
+            <result property="codiceMazzetta" column="codiceMazzetta" javaType="string"></result>	
+            <result property="posizione" column="posizione"></result>
+            <result property="numeroDocumenti" column="numeroDocumenti"></result>
+            <result property="idScatolaFK" column="idScatolaFK"></result>
+            <result property="stato" column="stato" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"></result>
+        </collection>
+    </resultMap>
+
+    <select id="findAllScatole" resultType="com.example.esempioFiven.model.Scatola">
+        SELECT * FROM scatole
+    </select>
+  	
+    <select id="countScatole" resultType="int">
+        SELECT COUNT(*) FROM scatole
+        <where>
+            <if test="stato != null and stato != ''"> AND statoDescrizione = #{stato} </if>
+            <if test="keyword != null and keyword != ''"> 
+                AND (codiceScatola LIKE CONCAT('%', #{keyword}, '%') OR idDdtFK = #{keyword}) 
+            </if>
+            <if test="startDate != null"> AND dataCreazione &gt;= #{startDate} </if>
+            <if test="endDate != null"> AND dataCreazione &lt;= #{endDate} </if>
+            <if test="operatore != null and operatore != ''"> AND idOperatoreFK = #{operatore} </if>
+        </where>
+    </select>
+  	
+    <select id="findAllWithMazzetteImpaginato" resultMap="scatoleResultMap">
+        SELECT s.*, m.idMazzetta, m.codiceMazzetta, m.posizione, m.numeroDocumenti, m.idScatolaFK, m.stato
+        FROM (
+            SELECT * FROM scatole
+            <where>
+                <if test="stato != null and stato != ''"> AND statoDescrizione = #{stato} </if>
+                <if test="keyword != null and keyword != ''"> 
+                    AND (codiceScatola LIKE CONCAT('%', #{keyword}, '%') OR idDdtFK = #{keyword}) 
+                </if>
+                <if test="startDate != null"> AND dataCreazione &gt;= #{startDate} </if>
+                <if test="endDate != null"> AND dataCreazione &lt;= #{endDate} </if>
+                <if test="operatore != null and operatore != ''">AND idOperatoreFK = #{operatore}</if>
+            </where>
+            ORDER BY ${orderBy} ${direzione}
+            LIMIT #{pageSize} OFFSET #{offset}
+        ) s
+        LEFT JOIN mazzette m ON s.idScatola = m.idScatolaFK
+        ORDER BY s.${orderBy} ${direzione}
+    </select>
+  	
+    <insert id="inserisciScatola" parameterType="com.example.esempioFiven.model.Scatola" useGeneratedKeys="true" keyProperty="idScatola">
+        INSERT INTO scatole (codiceScatola, idDdtFK, tipologia, stato, statoDescrizione, dataCreazione, idOperatoreFK, idClienteFK, idSpedizioneFK)
+        VALUES (#{codiceScatola}, #{idDdtFK}, #{tipologia}, 1, 'Inserita', NOW(), #{idOperatoreFK}, #{idClienteFK}, #{idSpedizioneFK})  	
+    </insert>
+  	
+    <select id="findAllInventario" resultType="com.example.esempioFiven.model.OggettoInventario">
+        SELECT * FROM inventario
+    </select>
+  	
+    <update id="decrementoInventario">
+        UPDATE inventario SET qta = qta - 1 WHERE tipo=#{tipologia} AND qta > 0
+    </update>
+  	
+    <select id="existsByCodice" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM scatole WHERE codiceScatola=#{codiceScatola}
+    </select>
+   	
+    <select id="findScatoleDaReggiare" resultMap="scatoleReggResultMap">
+        SELECT s.*, m.idMazzetta, m.codiceMazzetta, m.posizione, m.numeroDocumenti, m.idScatolaFK, m.stato
+        FROM (
+            SELECT * FROM scatole WHERE stato = 2 
+            <if test="keywordRegg != null and keywordRegg != ''"> 
+                AND (codiceScatola LIKE CONCAT('%', #{keywordRegg}, '%') OR idDdtFK = #{keywordRegg}) 
+            </if>
+            ORDER BY dataCreazione DESC LIMIT #{pageSizeRegg} OFFSET #{offsetRegg}
+        ) s
+        LEFT JOIN mazzette m ON s.idScatola = m.idScatolaFK
+        ORDER BY s.dataCreazione DESC
+    </select>
+  	
+    <resultMap id="scatoleReggResultMap" type="com.example.esempioFiven.model.Scatola">
+        <id property="idScatola" column="idScatola"></id>
+        <result property="codiceScatola" column="codiceScatola" javaType="string" ></result>
+        <result property="idDdtFK" column="idDdtFK"/>  		
+        <result property="idOperatoreFK" column="idOperatoreFK"></result>
+        <result property="tipologia" column="tipologia"></result>
+        <result property="statoDescrizione" column="statoDescrizione"></result>
+        <result property="idClienteFK" column="idClienteFK"></result>
+        <result property="idSpedizioneFK" column="idSpedizioneFK"></result>
+        <result property="dataCreazione" column="dataCreazione"></result>
+        <collection property="mazzette" ofType="com.example.esempioFiven.model.Mazzetta" notNullColumn="idMazzetta">
+            <id property="idMazzetta" column="idMazzetta"></id>
+            <result property="codiceMazzetta" column="codiceMazzetta" javaType="string"></result>	
+            <result property="posizione" column="posizione"></result>
+            <result property="numeroDocumenti" column="numeroDocumenti"></result>
+            <result property="idScatolaFK" column="idScatolaFK"></result>
+            <result property="stato" column="stato" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"></result>
+        </collection>
+    </resultMap>
+  	
+    <select id="countScatoleDaReggiare" resultType="int">
+        SELECT COUNT(*) FROM scatole WHERE stato = 2
+        <if test="keywordRegg != null and keywordRegg != ''"> 
+            AND (codiceScatola LIKE CONCAT('%', #{keywordRegg}, '%') OR idDdtFK = #{keywordRegg}) 
+        </if>
+    </select>
+	
+    <update id="associaScatolaADdt">
+        UPDATE scatole SET idDdtFK = #{idDdt} WHERE codiceScatola = #{codiceScatola}
+    </update>
+	
+    <update id="pallettizzazioneScatole">
+        UPDATE scatole SET idPalletFK = #{idPallet} WHERE idScatola IN 
+        <foreach item="id" collection="idScatole" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+	
+    <select id="findScatoleByPallet" resultMap="scatoleResultMap">
+        SELECT s.*, u.descrizione AS nomeOperatore, m.idMazzetta, m.codiceMazzetta, m.posizione, m.numeroDocumenti
+        FROM scatole s
+        LEFT JOIN users u ON s.idOperatoreFK = u.idOperatore
+        LEFT JOIN mazzette m ON s.idScatola = m.idScatolaFK
+        WHERE s.idPalletFK = #{idPallet}
+        ORDER BY s.dataCreazione ASC
+    </select>
+	
+	<update id="svincolaScatole">
+	    UPDATE scatole 
+	    SET idPalletFK = NULL 
+	    WHERE idPalletFK = #{idPallet}
+	</update>
+	
+	<select id="findDisponibiliPerDdt" resultMap="scatoleResultMap">
+	    SELECT s.*, m.idMazzetta, m.codiceMazzetta, m.posizione, m.numeroDocumenti
+	    FROM scatole s
+	    LEFT JOIN mazzette m ON s.idScatola = m.idScatolaFK
+	    WHERE s.idDdtFK = #{idDdt} AND s.idPalletFK IS NULL
+	</select>
+</mapper>

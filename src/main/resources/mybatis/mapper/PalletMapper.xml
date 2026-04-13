@@ -1,0 +1,68 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  
+  
+   <mapper namespace="com.example.esempioFiven.mybatis.mapper.PalletMapper">
+	
+	<select id="findPalletById" resultType="com.example.esempioFiven.dto.PalletDTO">
+	    SELECT 
+	        p.*, 
+	        u.descrizione AS nomeOperatore,
+	        d.codiceDdt AS codiceDdtVisualizzato
+	    FROM pallet p
+	    LEFT JOIN users u ON p.idOperatoreFK = u.idOperatore
+	    LEFT JOIN ddt d ON p.idDdtFK = d.idDdt
+	    WHERE p.idPallet = #{idPallet}
+	</select>
+	
+	<select id="countPallet" resultType="int">
+		SELECT COUNT(*)
+		FROM pallet
+		WHERE (statoDescrizione NOT IN ('Consegnato', 'Annullato', 'In Giacenza') OR statoDescrizione IS NULL)
+		ORDER BY dataCreazione ASC 
+	</select>
+	
+	<select id="findPalletPage" resultType="com.example.esempioFiven.dto.PalletDTO">
+	    SELECT 
+	        p.*, 
+	        u.descrizione AS nomeOperatore
+	    FROM pallet p
+	    LEFT JOIN users u ON p.idOperatoreFK = u.idOperatore 
+	    WHERE (p.statoDescrizione NOT IN ('Consegnato', 'Annullato', 'In Giacenza') OR p.statoDescrizione IS NULL)
+	    ORDER BY p.dataCreazione ASC
+	    LIMIT #{pageSize} OFFSET #{offset}
+	</select>
+	
+	<insert id="insertPallet" useGeneratedKeys="true" keyProperty="idPallet">
+		INSERT INTO pallet(
+			codicePallet, 
+			dataCreazione,
+			stato,
+			statoDescrizione,
+			idOperatoreFK,
+			note,
+			idDdtFK
+			) VALUES (
+				#{codicePallet},
+				NOW(),
+				1,
+				#{statoDescrizione},
+				#{idOperatoreFK},
+				#{note},
+				#{idDdtFK}
+			)
+	</insert>
+	
+	<select id="getUltimaCifraProgressivo" resultType="java.lang.Integer">
+        SELECT COUNT(*) 
+        FROM pallet 
+        WHERE codicePallet 
+        LIKE #{prefisso}
+    </select>
+    
+    <delete id="deleteById">
+	    DELETE FROM pallet WHERE idPallet = #{id}
+	</delete>
+	
+  </mapper>
