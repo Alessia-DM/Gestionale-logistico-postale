@@ -15,38 +15,38 @@ Sviluppato durante il periodo di stage presso Fiven, questo applicativo è stato
 
 ### 1. Accesso e Sicurezza
 Il sistema è protetto da un modulo di autenticazione che gestisce le sessioni utente e protegge le rotte sensibili.
-> **INSERISCI SCREENSHOT 1 QUI:** (Inquadra la pagina di Login)
-> *Esempio nome file: screenshots/01_login.png*
+![Schermata di Login](screenshots/login.png)
 
 ### 2. Dashboard e Anagrafica Clienti
 Visualizzazione centralizzata dei partner commerciali e dei servizi offerti.
-> **INSERISCI SCREENSHOT 2 QUI:** (Inquadra la tabella Clienti o Macroservizi)
-> *Esempio nome file: screenshots/02_anagrafica.png*
+![Sezione clienti](screenshots/clienti.png)
+![Sezione macroservizi](screenshots/macroservizi.png)
 
 ### 3. Gestione Scatole e Filtri Avanzati
 Questa sezione rappresenta il cuore del frontend custom. Include una sidebar con logica di filtraggio complessa sviluppata senza dipendenze esterne.
-> **INSERISCI SCREENSHOT 3 QUI:** (Inquadra la pagina Scatole mostrando la sidebar dei filtri aperta)
-> *Esempio nome file: screenshots/03_filtri.png*
+![Sezione scatole](screenshots/scatole1.png)
+![Sezione scatole](screenshots/scatole2.png)
+![Sezione scatole](screenshots/scatoledettaglio.png)
 
 ### 4. Inserimento e Tracciabilità
 Modulo per l'inserimento di nuovi colli con integrazione per la scansione o generazione di codici identificativi.
-> **INSERISCI SCREENSHOT 4 QUI:** (Inquadra il form di Inserimento Nuova Scatola)
-> *Esempio nome file: screenshots/04_inserimento.png*
+![Sezione scatole - inserimento](screenshots/inserimentoScatola.png)
 
 ### 5. Reggiatura e Fine Linea
 Interfaccia dedicata alla preparazione delle scatole (reggiatura) prima dell'associazione al pallet.
-> **INSERISCI SCREENSHOT 5 QUI:** (Inquadra la pagina Reggiatura)
-> *Esempio nome file: screenshots/05_reggiatura.png*
+![Sezione scatole - reggiatura](screenshots/reggiatura.png)
 
 ### 6. Composizione Pallet e Logica di Chiusura
 Processo di aggregazione delle scatole all'interno di un'unità pallet, con riepilogo finale prima della registrazione definitiva.
-> **INSERISCI SCREENSHOT 6 QUI:** (Inquadra la pagina Pallet, magari con il modal di conferma aperto)
-> *Esempio nome file: screenshots/06_pallet_composition.png*
+![Sezione pallet](screenshots/pallet.png)
+![Sezione pallet - inserimento](screenshots/nuovoPallet.png)
+![Sezione pallet - inserimento](screenshots/nuovoPallet2.png)
+![Sezione pallet - salvataggio](screenshots/salvataggioPallet.png)
 
 ### 7. Modulo di Stampa Etichette
 Generazione dinamica di etichette professionali complete di barcode e riepilogo mazzette per l'identificazione fisica dei pallet.
-> **INSERISCI SCREENSHOT 7 QUI:** (Inquadra la pagina Etichetta pronta per la stampa)
-> *Esempio nome file: screenshots/07_etichetta_stampa.png*
+![Sezione pallet - etichetta](screenshots/etichetta.png)
+![Sezione pallet - stampa](screenshots/stampa.png)
 
 ---
 
